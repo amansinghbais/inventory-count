@@ -8,6 +8,7 @@ import userModule from "./modules/user";
 import productModule from "./modules/product";
 import countModule from "./modules/count";
 import { setPermissions } from "@/authorization"
+import utilModule from "./modules/util";
 
 
 // TODO check how to register it from the components only
@@ -32,6 +33,7 @@ const store = createStore<RootState>({
     user: userModule,
     product: productModule,
     count: countModule,
+    util: utilModule,
   },
 })
 

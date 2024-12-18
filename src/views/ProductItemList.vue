@@ -3,7 +3,10 @@
     <ion-thumbnail slot="start">
       <Image :src="getProduct(item.productId).mainImageUrl"/>
     </ion-thumbnail>
-    <ion-label class="ion-text-wrap">
+    <ion-label class="ion-text-wrap" v-if="item.isMatching || item.isMatchNotFound">
+      <h2>{{ item.scannedId }}</h2>
+    </ion-label>
+    <ion-label class="ion-text-wrap" v-else>
       <p class="overline">{{ item.itemStatusId === 'INV_COUNT_REJECTED' ? "rejected" : "" }}</p>
       <h2>{{ getProductIdentificationValue(productStoreSettings["productIdentificationPref"].primaryId, getProduct(item.productId)) || getProduct(item.productId).productName }}</h2>
       <p>{{ getProductIdentificationValue(productStoreSettings["productIdentificationPref"].secondaryId, getProduct(item.productId)) }}</p>
@@ -61,9 +64,9 @@ onMounted(() => {
  * It also handles the challenge of scrolling to an element on a page that is being navigated to and scroll smoothly.
  **/
 async function navigateToDetail(item: any) {
-  router.replace({ hash: `#${item.productId}-${item.importItemSeqId}` }); 
+  router.replace({ hash: item.scannedId ? `#${item.scannedId}` : `#${item.productId}-${item.importItemSeqId}` }); 
   setTimeout(() => {
-    const element = document.getElementById(`${item.productId}-${item.importItemSeqId}`);
+    const element = document.getElementById(item.scannedId ?  item.scannedId :`${item.productId}-${item.importItemSeqId}`);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
@@ -73,7 +76,7 @@ async function navigateToDetail(item: any) {
 // Method to display the item as selected by changing the ion-item color to light
 function isCurrentProduct() {
   // Added check for itemStatusId as we may have the same product added multiple times in different status(like in case when request recount an item)
-  return currentProduct.value.productId == props.item.productId && currentProduct.value.itemStatusId === props.item.itemStatusId && currentProduct.value.importItemSeqId === props.item.importItemSeqId
+  return currentProduct.value.scannedId ? (currentProduct.value.scannedId === props.item.scannedId) : (currentProduct.value.productId == props.item.productId && currentProduct.value.itemStatusId === props.item.itemStatusId && currentProduct.value.importItemSeqId === props.item.importItemSeqId)
 }
 
 </script>

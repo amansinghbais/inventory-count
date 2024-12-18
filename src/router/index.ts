@@ -8,6 +8,7 @@ import 'vue-router'
 import { DxpLogin, useAuthStore } from '@hotwax/dxp-components';
 import { loader } from '@/user-utils';
 import CountDetail from '@/views/CountDetail.vue';
+import HardCountDetail from '@/views/HardCountDetail.vue';
 import Tabs from '@/views/Tabs.vue';
 import Draft from "@/views/Draft.vue";
 import DraftDetail from "@/views/DraftDetail.vue";
@@ -19,6 +20,7 @@ import Closed from "@/views/Closed.vue";
 import StorePermissions from "@/views/StorePermissions.vue";
 import Settings from "@/views/Settings.vue";
 import BulkUpload from "@/views/BulkUpload.vue"
+import HardCount from "@/views/HardCount.vue"
 
 // Defining types for the meta values
 declare module 'vue-router' {
@@ -82,6 +84,15 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: 'hard-count-detail/:id',
+        name: 'HardCountDetail',
+        component: HardCountDetail,
+        props: true,
+        meta: {
+          permissionId: "APP_COUNT_VIEW"
+        }
+      },
+      {
         path: 'settings',
         component: () => import('@/views/Settings.vue')
       },
@@ -102,6 +113,15 @@ const routes: Array<RouteRecordRaw> = [
     path: '/draft',
     name: 'Draft',
     component: Draft,
+    beforeEnter: authGuard,
+    meta: {
+      permissionId: "APP_DRAFT_VIEW"
+    }
+  },
+  {
+    path: '/hardCount',
+    name: 'Hard Count',
+    component: HardCount,
     beforeEnter: authGuard,
     meta: {
       permissionId: "APP_DRAFT_VIEW"
